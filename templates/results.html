@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Time-Series AI Insight Summarizer</title>
+    <title>Analysis Results</title>
     <style>
         * {
             margin: 0;
@@ -54,7 +54,7 @@
             background: rgba(255,255,255,0.2);
         }
 
-        /* Main content */
+        /* Main container */
         .container {
             margin-left: 270px;
             padding: 40px;
@@ -77,41 +77,68 @@
             color: #243447;
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 12px;
+            font-size: 22px;
+            color: #2d3e50;
+            border-left: 5px solid #226bfd;
+            padding-left: 10px;
         }
 
-        input[type="file"] {
-            padding: 10px;
+        details {
+            background: #f1f3f7;
+            border: 1px solid #d8dce4;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        pre {
+            background: #fff;
+            padding: 15px;
             border-radius: 8px;
-            border: 1px solid #c7ccd6;
-            background: #fafbfc;
+            border: 1px solid #d4d8e0;
+            white-space: pre-wrap;
+            margin-top: 12px;
             font-size: 14px;
-            width: 80%;
         }
 
-        button {
+        img {
+            width: 100%;
+            max-width: 850px;
+            border-radius: 10px;
+            border: 1px solid #d0d4dd;
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 25px;
+        }
+
+        a.back-btn {
+            display: inline-block;
             margin-top: 20px;
-            padding: 12px 20px;
             font-size: 16px;
             font-weight: 600;
-            border: none;
-            border-radius: 8px;
+            padding: 12px 20px;
             background: #226bfd;
             color: white;
-            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
             transition: 0.25s ease;
-            width: 50%;
         }
 
-        button:hover {
+        a.back-btn:hover {
             background: #1a57d6;
         }
 
         footer {
-            margin-top: 50px;
+            margin-top: 40px;
             text-align: center;
             padding-top: 18px;
             border-top: 1px solid #d4d9e3;
@@ -119,12 +146,7 @@
             color: #6b7684;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* dark mode button */
+        /* Dark mode button */
         .dark-btn {
             margin-top: 15px;
             padding: 8px;
@@ -146,14 +168,28 @@
             color: #e5e7eb;
         }
 
-        .dark-mode input[type="file"] {
-            background: #2a2f38;
-            border-color: #3a3f48;
+        .dark-mode .container {
             color: #e5e7eb;
         }
 
-        .dark-mode button {
-            background: #4461b2;
+        .dark-mode details {
+            background: #2a2f38;
+            border-color: #3a3f48;
+        }
+
+        .dark-mode pre {
+            background: #1e242b;
+            border-color: #3a3f48;
+            color: #d0d6df;
+        }
+
+        .dark-mode img {
+            border-color: #3a3f48;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -162,23 +198,31 @@
     <div class="sidebar">
         <h2>Time-Series AI</h2>
         <a href="/">Upload Dataset</a>
-        <a href="/results">View Results</a>
         <button class="dark-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
 
     <div class="container">
         <div class="welcome-msg">
-            Welcome! Upload your CSV dataset to generate AI-powered insights.
+            Your dataset has been analyzed. Explore the insights and plots below.
         </div>
 
-        <h1>Upload Your Time-Series Dataset (CSV)</h1>
-        <form action="/analyze" method="POST" enctype="multipart/form-data">
-            <input type="file" name="dataset" accept=".csv" required>
-            <button type="submit">Analyze</button>
-        </form>
+        <h1>AI Time-Series Analysis Results</h1>
+
+        <h2>Insights</h2>
+        <details>
+            <summary>View Insights</summary>
+            <pre>{{ insights }}</pre>
+        </details>
+
+        <h2>Plots</h2>
+        {% for p in plots %}
+            <img src="{{ url_for('static', filename='plots/' + p) }}">
+        {% endfor %}
+
+        <a href="/" class="back-btn">Back</a>
 
         <footer>
-            AI Time-Series Insight Summarizer • Automated Data Analysis
+            AI Time-Series Insight Summarizer • Automated Analysis
         </footer>
     </div>
 
